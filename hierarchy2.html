@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hierarchy 02 · Monochromatic System — Anusha Prasad</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --ink: #0A0A0A;
+      --ink-soft: #2E2E2E;
+      --ink-dim: #8A8A8A;
+      --rule: #D9D9D9;
+      --signal: #E8341F;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Archivo', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body { overflow-x: hidden; }
+
+    /* GRID OVERLAY - decorative Swiss touch */
+    .grid-guide {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      padding: 0 12px;
+      opacity: 0.035;
+    }
+    .grid-guide div { background: var(--signal); }
+
+    /* MASTHEAD */
+    .masthead {
+      position: relative;
+      z-index: 3;
+      border-bottom: 1px solid var(--ink);
+      padding: 16px 0;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .masthead a {
+      color: var(--ink);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .masthead a:hover { color: var(--signal); }
+
+    /* PAGE NUMBERING BAR - Swiss touch */
+    .pagination-bar {
+      position: relative;
+      z-index: 2;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--rule);
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .pagination-bar .num {
+      color: var(--signal);
+      font-weight: 700;
+      font-variation-settings: "wdth" 125;
+    }
+
+    /* TITLE BLOCK */
+    .title-block {
+      position: relative;
+      z-index: 2;
+      padding: 80px 0 60px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .page-title {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 125;
+      font-size: clamp(72px, 13vw, 200px);
+      line-height: 0.82;
+      letter-spacing: -0.06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0;
+    }
+    .page-title .line-2 {
+      display: block;
+      color: var(--signal);
+    }
+
+    .title-meta {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    @media (min-width: 768px) {
+      .title-meta { grid-template-columns: repeat(4, 1fr); gap: 40px; }
+    }
+    .title-meta .item { border-top: 1px solid var(--ink); padding-top: 14px; }
+    .title-meta .key {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 10.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 8px;
+    }
+    .title-meta .val {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-variation-settings: "wdth" 110;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .lede {
+      margin-top: 48px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 300;
+      font-size: 22px;
+      line-height: 1.45;
+      color: var(--ink-soft);
+      max-width: 720px;
+    }
+    .lede em {
+      font-weight: 700;
+      font-style: normal;
+      font-variation-settings: "wdth" 115;
+      color: var(--signal);
+    }
+
+    /* SPECIMEN */
+    .specimen {
+      position: relative;
+      z-index: 2;
+      padding: 60px 0 20px;
+    }
+
+    .spec-item {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 44px 0;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+    @media (min-width: 992px) {
+      .spec-item {
+        grid-template-columns: 200px 1fr;
+        gap: 60px;
+      }
+    }
+
+    .spec-num {
+      position: absolute;
+      top: 44px;
+      right: 0;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 125;
+      font-size: 140px;
+      line-height: 0.85;
+      color: var(--rule);
+      letter-spacing: -0.06em;
+      z-index: -1;
+      pointer-events: none;
+    }
+    @media (max-width: 767px) {
+      .spec-num { font-size: 80px; top: 20px; }
+    }
+
+    .spec-meta {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 10.5px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      line-height: 1.9;
+    }
+    .spec-meta .label {
+      color: var(--signal);
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: block;
+      letter-spacing: 0.18em;
+    }
+    .spec-meta .val { color: var(--ink); font-weight: 600; }
+
+    /* TYPE STYLES - all Archivo, varying weight/width/case */
+
+    /* H1 - Display size, 900 weight, expanded width */
+    .type-h1 {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 120;
+      font-size: 49px;
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin: 0 0 20px;
+    }
+
+    /* H2 - Heavy but narrower */
+    .type-h2 {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 800;
+      font-variation-settings: "wdth" 100;
+      font-size: 39px;
+      line-height: 1.02;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin: 0 0 18px;
+    }
+
+    /* H3 - Bold, condensed feel */
+    .type-h3 {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-variation-settings: "wdth" 85;
+      font-size: 31px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin: 0 0 16px;
+    }
+
+    /* H4 - Medium, with uppercase for structural differentiation */
+    .type-h4 {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 600;
+      font-variation-settings: "wdth" 110;
+      font-size: 25px;
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+
+    /* Body */
+    .type-body {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    /* Emphasis - italic + weight step */
+    .type-body em,
+    .type-emphasis {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-style: italic;
+      font-variation-settings: "wdth" 115;
+      color: var(--ink);
+    }
+
+    /* Link - signal red, subtle underline, weight step */
+    .type-body a,
+    .type-link {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 600;
+      color: var(--signal);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 1px;
+      border-bottom: 1.5px solid var(--signal);
+      transition: background 0.2s, color 0.2s;
+    }
+    .type-body a:hover,
+    .type-link:hover {
+      background: var(--signal);
+      color: var(--bg);
+    }
+
+    /* SCALE CARD */
+    .scale-card {
+      margin-top: 60px;
+      padding: 50px 44px;
+      background: var(--ink);
+      color: var(--bg);
+      position: relative;
+    }
+    .scale-card .marker {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      background: var(--signal);
+      color: var(--bg);
+      padding: 8px 14px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 700;
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .scale-card h3 {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 125;
+      font-size: 42px;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      line-height: 0.98;
+      margin: 30px 0 18px;
+    }
+    .scale-card h3 span { color: var(--signal); }
+    .scale-card p {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 400;
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: #CFCFCF;
+      max-width: 64ch;
+      margin: 0 0 32px;
+    }
+    .scale-card p strong { color: var(--bg); font-weight: 700; }
+
+    .scale-table {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0;
+      border: 1px solid #2A2A2A;
+    }
+    .scale-table div {
+      padding: 18px 16px;
+      border-right: 1px solid #2A2A2A;
+    }
+    .scale-table div:last-child { border-right: 0; }
+    .scale-table .lvl {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--signal);
+      margin-bottom: 8px;
+    }
+    .scale-table .sz {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-variation-settings: "wdth" 125;
+      font-size: 30px;
+      color: var(--bg);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* WEIGHT SHOWCASE strip */
+    .weight-strip {
+      margin-top: 60px;
+      padding: 40px 0;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .weight-label {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--signal);
+      margin-bottom: 18px;
+    }
+    .weight-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 24px;
+      align-items: baseline;
+    }
+    .weight-row span {
+      font-family: 'Archivo', sans-serif;
+      font-size: 32px;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .w100 { font-weight: 100; }
+    .w200 { font-weight: 200; }
+    .w300 { font-weight: 300; }
+    .w400 { font-weight: 400; }
+    .w500 { font-weight: 500; }
+    .w600 { font-weight: 600; }
+    .w700 { font-weight: 700; }
+    .w800 { font-weight: 800; }
+    .w900 { font-weight: 900; }
+
+    /* FOOTER */
+    footer {
+      padding: 50px 0 36px;
+      border-top: 1px solid var(--ink);
+      margin-top: 80px;
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      position: relative;
+      z-index: 2;
+    }
+    footer a {
+      color: var(--signal);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: reveal 0.7s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .reveal.d1 { animation-delay: 0.08s; }
+    .reveal.d2 { animation-delay: 0.16s; }
+    .reveal.d3 { animation-delay: 0.24s; }
+    .reveal.d4 { animation-delay: 0.32s; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 767px) {
+      .type-h1 { font-size: 38px; }
+      .type-h2 { font-size: 31px; }
+      .type-h3 { font-size: 26px; }
+      .type-h4 { font-size: 22px; }
+      .scale-card h3 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span><a href="index.html">← INDEX</a></span>
+      <span>Hierarchy 02 of 03 · Single Typeface</span>
+    </div>
+  </div>
+
+  <!-- PAGINATION BAR -->
+  <div class="container">
+    <div class="pagination-bar">
+      <span><span class="num">§ 02</span> &nbsp; Monochromatic System</span>
+      <span>Archivo · Google Fonts · 1972/2020</span>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <section class="title-block">
+    <div class="container">
+      <h1 class="page-title reveal d1">
+        ONE
+        <span class="line-2">TYPEFACE.</span>
+      </h1>
+
+      <div class="title-meta reveal d2">
+        <div class="item">
+          <div class="key">Typeface</div>
+          <div class="val">Archivo</div>
+        </div>
+        <div class="item">
+          <div class="key">Axes</div>
+          <div class="val">wght · wdth · ital</div>
+        </div>
+        <div class="item">
+          <div class="key">Modular Scale</div>
+          <div class="val">1.250 · Major Third</div>
+        </div>
+        <div class="item">
+          <div class="key">Base</div>
+          <div class="val">16 px</div>
+        </div>
+      </div>
+
+      <p class="lede reveal d3">
+        Discipline in a single family. Here, hierarchy is earned not by reaching for a different typeface but by reaching into the one already chosen — <em>weight, width, case, italic</em>. Nine grades of Archivo, three width positions, one grid. The Swiss instinct applied to a contemporary grotesque.
+      </p>
+    </div>
+  </section>
+
+  <!-- SPECIMENS -->
+  <section class="specimen">
+    <div class="container">
+
+      <!-- H1 -->
+      <div class="spec-item">
+        <div class="spec-num">01</div>
+        <div class="spec-meta">
+          <span class="label">Display · H1</span>
+          <span class="val">49 px</span><br>
+          <span>1.250 ⁵</span><br>
+          <span>Weight 900</span><br>
+          <span>Width 120</span><br>
+          <span>Uppercase</span>
+        </div>
+        <div>
+          <h1 class="type-h1">WEIGHT IS STRUCTURE WHEN ONLY ONE FAMILY SPEAKS.</h1>
+          <p class="type-body">
+            At 900-weight and 120-width, Archivo pushes into display territory without asking a second typeface for help. Uppercase keeps the line geometric and <em>architectural</em>. Read the <a href="#">notes on variable axes</a> below.
+          </p>
+        </div>
+      </div>
+
+      <!-- H2 -->
+      <div class="spec-item">
+        <div class="spec-num">02</div>
+        <div class="spec-meta">
+          <span class="label">Section · H2</span>
+          <span class="val">39 px</span><br>
+          <span>1.250 ⁴</span><br>
+          <span>Weight 800</span><br>
+          <span>Width 100</span><br>
+          <span>Title Case</span>
+        </div>
+        <div>
+          <h2 class="type-h2">The Section Head Steps Down</h2>
+          <p class="type-body">
+            H2 relaxes the width to default and drops to 800. The change is small on paper and <em>decisive</em> on screen — a reminder that hierarchy in a single family often lives in small numerical moves.
+          </p>
+        </div>
+      </div>
+
+      <!-- H3 -->
+      <div class="spec-item">
+        <div class="spec-num">03</div>
+        <div class="spec-meta">
+          <span class="label">Subsection · H3</span>
+          <span class="val">31 px</span><br>
+          <span>1.250 ³</span><br>
+          <span>Weight 700</span><br>
+          <span>Width 85</span><br>
+          <span>Tighter tracking</span>
+        </div>
+        <div>
+          <h3 class="type-h3">Condensed width as hierarchical tool</h3>
+          <p class="type-body">
+            H3 narrows the width axis to 85 — a quieter, more efficient voice. Condensed widths are useful <em>exactly here</em>: between display and running text, where density reads as authority.
+          </p>
+        </div>
+      </div>
+
+      <!-- H4 -->
+      <div class="spec-item">
+        <div class="spec-num">04</div>
+        <div class="spec-meta">
+          <span class="label">Minor · H4</span>
+          <span class="val">25 px</span><br>
+          <span>1.250 ²</span><br>
+          <span>Weight 600</span><br>
+          <span>Width 110</span><br>
+          <span>Sentence case</span>
+        </div>
+        <div>
+          <h4 class="type-h4">The smallest heading in the system.</h4>
+          <p class="type-body">
+            At H4 the width opens back up to 110 and the weight steps to 600, giving a clear separation from body copy without crowding the section heads above. A <em>measured</em> grade, not a loud one.
+          </p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="spec-item">
+        <div class="spec-num">05</div>
+        <div class="spec-meta">
+          <span class="label">Body Text</span>
+          <span class="val">16 px</span><br>
+          <span>1.250 ⁰</span><br>
+          <span>Weight 400</span><br>
+          <span>Width 100</span><br>
+          <span>Leading 1.65</span>
+        </div>
+        <div>
+          <p class="type-body">
+            Body text is the reason the hierarchy exists. Archivo at 400 weight and default width sets into long paragraphs with composure — open counters, even color, a slight mechanical quality that is at home on the screen. The measure holds at sixty-two characters, the leading at 1.65, and <em>nothing else changes</em>. When one family carries the entire page, consistency at the body level is what makes every other level legible as a deviation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Emphasis -->
+      <div class="spec-item">
+        <div class="spec-num">06</div>
+        <div class="spec-meta">
+          <span class="label">Emphasis</span>
+          <span class="val">16 px</span><br>
+          <span>italic</span><br>
+          <span>Weight 700</span><br>
+          <span>Width 115</span>
+        </div>
+        <div>
+          <p class="type-body">
+            Emphasis combines three axis moves at once — italic, a step in weight, a step in width. No color shift. The triple move makes <em>emphasized words</em> feel intentional within an otherwise monochromatic page, without reaching for a different family or a foreign hue. This is the efficiency argument for a single-typeface system: every distinction is already available inside the file.
+          </p>
+        </div>
+      </div>
+
+      <!-- Link -->
+      <div class="spec-item">
+        <div class="spec-num">07</div>
+        <div class="spec-meta">
+          <span class="label">Link Text</span>
+          <span class="val">16 px</span><br>
+          <span>Weight 600</span><br>
+          <span>Width 100</span><br>
+          <span>1.5px underline</span>
+        </div>
+        <div>
+          <p class="type-body">
+            Links are the one concession to color — a single signal red, reserved for interactive text. A half-step weight increase and a firm 1.5-pixel underline hold the link visible in a paragraph of 400-weight text. Hover inverts the relationship: <a href="#">the link becomes a block of color</a>, which is the clearest possible confirmation that the cursor is in the right place.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WEIGHT SHOWCASE -->
+    <div class="container">
+      <div class="weight-strip">
+        <div class="weight-label">Archivo · 9 Weights Available</div>
+        <div class="weight-row">
+          <span class="w100">Archivo 100</span>
+          <span class="w200">Archivo 200</span>
+          <span class="w300">Archivo 300</span>
+          <span class="w400">Archivo 400</span>
+          <span class="w500">Archivo 500</span>
+          <span class="w600">Archivo 600</span>
+          <span class="w700">Archivo 700</span>
+          <span class="w800">Archivo 800</span>
+          <span class="w900">Archivo 900</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCALE CARD -->
+    <div class="container">
+      <div class="scale-card">
+        <div class="marker">Modular Scale</div>
+        <h3>1.250 <span>— Major Third.</span></h3>
+        <p>
+          Each size is multiplied by <strong>1.25</strong>, a gentler ratio than the Perfect Fourth. The smaller jumps suit a single-typeface system: with no change of family to mark hierarchy, large size gaps would feel arbitrary. Here, the modest multiplier leaves room for weight and width to do the <strong>structural work</strong>.
+        </p>
+        <div class="scale-table">
+          <div><div class="lvl">Body</div><div class="sz">16</div></div>
+          <div><div class="lvl">H4</div><div class="sz">20</div></div>
+          <div><div class="lvl">H3</div><div class="sz">25</div></div>
+          <div><div class="lvl">H2</div><div class="sz">31</div></div>
+          <div><div class="lvl">H1</div><div class="sz">39</div></div>
+          <div><div class="lvl">Display</div><div class="sz">49</div></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <span>Anusha Prasad · HCI 472 · 2026</span>
+      <span><a href="index.html">Return to Index →</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>

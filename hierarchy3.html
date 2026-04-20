@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hierarchy 03 · Hybrid Futures — Anusha Prasad</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #10160F;
+      --bg-elev: #181F16;
+      --ink: #EFE7D6;
+      --ink-soft: #C8C0B0;
+      --ink-dim: #807A6E;
+      --rust: #D97757;
+      --sage: #9AB08A;
+      --rule: #2A322A;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    body { overflow-x: hidden; }
+
+    /* Grain + subtle radial glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(217,119,87,0.18) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+    }
+
+    /* MASTHEAD */
+    .masthead {
+      position: relative;
+      z-index: 3;
+      border-bottom: 1px solid var(--rule);
+      padding: 18px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .masthead a {
+      color: var(--rust);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .masthead a:hover { color: var(--ink); }
+
+    /* TITLE BLOCK - asymmetric */
+    .title-block {
+      position: relative;
+      z-index: 2;
+      padding: 90px 0 80px;
+    }
+    .title-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: end;
+    }
+    @media (min-width: 992px) {
+      .title-grid { grid-template-columns: 1.4fr 1fr; gap: 60px; }
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .eyebrow::before {
+      content: "◆";
+      color: var(--sage);
+    }
+
+    .page-title {
+      margin: 0;
+      line-height: 0.88;
+      letter-spacing: -0.035em;
+    }
+    .page-title .word-1 {
+      display: block;
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 96;
+      font-weight: 700;
+      font-size: clamp(70px, 11vw, 168px);
+      color: var(--ink);
+    }
+    .page-title .word-2 {
+      display: block;
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(80px, 12vw, 186px);
+      color: var(--rust);
+      margin-left: 6vw;
+      margin-top: -0.08em;
+    }
+
+    .title-info {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--ink-soft);
+      border-left: 1px solid var(--rust);
+      padding: 8px 0 8px 22px;
+    }
+    .title-info .tag {
+      display: block;
+      color: var(--rust);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .title-info strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .intro {
+      margin-top: 70px;
+      max-width: 720px;
+    }
+    .intro p {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 26px;
+      line-height: 1.42;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .intro p em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    /* DIVIDER ORNAMENT */
+    .divider {
+      position: relative;
+      z-index: 2;
+      padding: 30px 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--ink-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+    .divider .orn { color: var(--rust); }
+
+    /* SPECIMEN */
+    .specimen { position: relative; z-index: 2; padding: 40px 0 20px; }
+
+    .spec-item {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 56px 0;
+      border-top: 1px solid var(--rule);
+      position: relative;
+    }
+    @media (min-width: 992px) {
+      .spec-item {
+        grid-template-columns: 220px 1fr;
+        gap: 70px;
+      }
+      /* alternate layout */
+      .spec-item.flip { grid-template-columns: 1fr 220px; }
+      .spec-item.flip .spec-meta { order: 2; }
+      .spec-item.flip .spec-content { order: 1; text-align: right; }
+      .spec-item.flip .type-body,
+      .spec-item.flip .type-body {
+        margin-left: auto;
+      }
+    }
+
+    .spec-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      line-height: 1.9;
+    }
+    .spec-meta .label {
+      color: var(--rust);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: block;
+      letter-spacing: 0.2em;
+    }
+    .spec-meta .val { color: var(--ink); }
+    .spec-meta .face {
+      color: var(--sage);
+      margin-top: 12px;
+      display: block;
+      font-weight: 500;
+    }
+
+    /* TYPE STYLES — three typefaces, deliberate alternation */
+
+    /* H1 - Bricolage Grotesque, bold, expanded optical size */
+    .type-h1 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 96;
+      font-weight: 700;
+      font-size: 81px;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin: 0 0 24px;
+    }
+    .type-h1 em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--rust);
+    }
+
+    /* H2 - Instrument Serif Italic — the expressive voice */
+    .type-h2 {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 54px;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 0 0 20px;
+    }
+
+    /* H3 - Bricolage condensed optical size */
+    .type-h3 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 48;
+      font-weight: 600;
+      font-size: 36px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin: 0 0 18px;
+    }
+
+    /* H4 - Instrument Serif Roman */
+    .type-h4 {
+      font-family: 'Instrument Serif', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 1.25;
+      letter-spacing: 0;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+
+    /* Body - Bricolage 400 */
+    .type-body {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 14;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 62ch;
+      margin: 0;
+    }
+
+    /* Emphasis - Instrument Serif italic inside body */
+    .type-body em,
+    .type-emphasis {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--rust);
+      font-size: 1.1em;
+      letter-spacing: 0.01em;
+    }
+
+    /* Link - JetBrains Mono — the machine speaks */
+    .type-body a,
+    .type-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      color: var(--sage);
+      text-decoration: none;
+      font-size: 0.9em;
+      padding: 1px 6px;
+      background: rgba(154, 176, 138, 0.08);
+      border-bottom: 1px solid var(--sage);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .type-body a::before { content: "⟶ "; opacity: 0.7; }
+    .type-body a:hover,
+    .type-link:hover {
+      background: var(--sage);
+      color: var(--bg);
+      border-color: var(--sage);
+    }
+
+    /* SCALE CARD — dramatic presentation */
+    .scale-section {
+      position: relative;
+      z-index: 2;
+      padding: 80px 0 40px;
+      border-top: 1px solid var(--rule);
+      margin-top: 40px;
+    }
+
+    .scale-card {
+      background: var(--bg-elev);
+      padding: 60px 50px;
+      position: relative;
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+    .scale-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--rust);
+    }
+
+    .scale-card .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 18px;
+    }
+    .scale-card h3 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 72;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+    .scale-card h3 em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--rust);
+      letter-spacing: -0.01em;
+    }
+    .scale-card .subtitle {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--sage);
+      margin-bottom: 30px;
+    }
+    .scale-card p {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      max-width: 64ch;
+      margin: 0 0 36px;
+    }
+    .scale-card p strong { color: var(--ink); font-weight: 600; }
+    .scale-card p em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      color: var(--rust);
+      font-size: 1.08em;
+    }
+
+    .scale-table {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .scale-table div {
+      background: var(--bg-elev);
+      padding: 18px 16px;
+    }
+    .scale-table .lvl {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+    .scale-table .sz {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 48;
+      font-weight: 700;
+      font-size: 32px;
+      color: var(--ink);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid var(--rule);
+      margin-top: 80px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      position: relative;
+      z-index: 2;
+    }
+    footer a {
+      color: var(--rust);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: reveal 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .reveal.d1 { animation-delay: 0.1s; }
+    .reveal.d2 { animation-delay: 0.2s; }
+    .reveal.d3 { animation-delay: 0.3s; }
+    .reveal.d4 { animation-delay: 0.4s; }
+    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 767px) {
+      .type-h1 { font-size: 54px; }
+      .type-h2 { font-size: 40px; }
+      .type-h3 { font-size: 30px; }
+      .type-h4 { font-size: 22px; }
+      .scale-card { padding: 40px 28px; }
+      .scale-card h3 { font-size: 40px; }
+      .spec-item.flip .spec-content { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span><a href="index.html">← INDEX</a></span>
+      <span>Hierarchy 03 of 03 · Experimental · Three Typefaces</span>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <section class="title-block">
+    <div class="container">
+      <div class="eyebrow reveal d1">Hierarchy 03 · Student's Choice · Experimental</div>
+
+      <div class="title-grid">
+        <h1 class="page-title reveal d2">
+          <span class="word-1">Hybrid</span>
+          <span class="word-2">futures.</span>
+        </h1>
+
+        <div class="title-info reveal d3">
+          <span class="tag">Typefaces</span>
+          <strong>Bricolage Grotesque</strong><br>
+          <strong>Instrument Serif</strong><br>
+          <strong>JetBrains Mono</strong><br>
+          <br>
+          <span class="tag">Scale</span>
+          <strong>1.500 · Perfect Fifth</strong><br>
+          <br>
+          <span class="tag">Base</span>
+          <strong>16 px</strong>
+        </div>
+      </div>
+
+      <div class="intro reveal d4">
+        <p>
+          Three typefaces in conversation — a <em>variable grotesque</em> for weight and structure, an <em>italic display serif</em> for breath and ornament, and a <em>monospace</em> for the voice of the machine. The experiment: can a hierarchy built from three temperaments still feel like one document? This page is the answer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="divider">
+      <span class="orn">◆</span>
+      <span>Specimens · 01 → 07</span>
+      <span class="orn">◆</span>
+    </div>
+  </div>
+
+  <!-- SPECIMENS -->
+  <section class="specimen">
+    <div class="container">
+
+      <!-- H1 -->
+      <div class="spec-item">
+        <div class="spec-meta">
+          <span class="label">Display · H1</span>
+          <span class="val">81 px · 1.5⁴</span><br>
+          <span>Bricolage 700</span>
+          <span class="face">+ Instrument italic accent</span>
+        </div>
+        <div class="spec-content">
+          <h1 class="type-h1">A grotesque holds the <em>weight</em>.</h1>
+          <p class="type-body">
+            H1 belongs to Bricolage Grotesque at 700 — wide optical size, tight tracking, a contemporary voice built for display. A single word steps out into Instrument Serif italic to establish the pattern that will play across this entire page: the <em>grotesque is the structure</em>, the serif is the commentary.
+          </p>
+        </div>
+      </div>
+
+      <!-- H2 -->
+      <div class="spec-item flip">
+        <div class="spec-meta">
+          <span class="label">Section · H2</span>
+          <span class="val">54 px · 1.5³</span><br>
+          <span>Instrument Serif Italic</span>
+          <span class="face">400 · the breath</span>
+        </div>
+        <div class="spec-content">
+          <h2 class="type-h2">The serif speaks in italics.</h2>
+          <p class="type-body">
+            H2 hands the microphone to Instrument Serif. Its thin strokes and elongated forms feel almost hand-drawn at this scale — deliberately ornamental, deliberately <em>unlike</em> the grotesque above. The contrast is the entire design argument: two voices, not blended but alternating.
+          </p>
+        </div>
+      </div>
+
+      <!-- H3 -->
+      <div class="spec-item">
+        <div class="spec-meta">
+          <span class="label">Subsection · H3</span>
+          <span class="val">36 px · 1.5²</span><br>
+          <span>Bricolage 600</span>
+          <span class="face">opsz 48 — text-ish</span>
+        </div>
+        <div class="spec-content">
+          <h3 class="type-h3">Return to the grotesque, dialed in.</h3>
+          <p class="type-body">
+            H3 comes back to Bricolage — this time at a smaller optical size, where its proportions behave more like text than display. The return creates rhythm: <em>grotesque, serif, grotesque, serif</em> — a call-and-response that makes the page feel composed rather than collaged.
+          </p>
+        </div>
+      </div>
+
+      <!-- H4 -->
+      <div class="spec-item flip">
+        <div class="spec-meta">
+          <span class="label">Minor · H4</span>
+          <span class="val">24 px · 1.5¹</span><br>
+          <span>Instrument Serif Roman</span>
+          <span class="face">400 · the quiet note</span>
+        </div>
+        <div class="spec-content">
+          <h4 class="type-h4">And the serif returns, quietly.</h4>
+          <p class="type-body">
+            H4 is Instrument Serif in its upright form — no italic, no volume, just the serif's presence as a marker. Small as it is, the typeface switch remains <em>perceptible</em>, which is exactly what a minor heading should be: a signal that a new thought has begun.
+          </p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="spec-item">
+        <div class="spec-meta">
+          <span class="label">Body Text</span>
+          <span class="val">16 px · 1.5⁰</span><br>
+          <span>Bricolage 400</span>
+          <span class="face">opsz 14 · the workhorse</span>
+        </div>
+        <div class="spec-content">
+          <p class="type-body">
+            Body copy stays with Bricolage — a single family doing the long haul, its small-optical-size variant tuned for comfortable reading at sixteen pixels. The grotesque's rounded counters and slightly soft terminals keep the reading surface warm; line-height at 1.65 gives the eye room to breathe. Across long paragraphs, the <em>consistency of the body</em> is what allows every deviation — the serif interjections, the monospace links — to feel purposeful rather than chaotic. Variety is only legible against a steady ground.
+          </p>
+        </div>
+      </div>
+
+      <!-- Emphasis -->
+      <div class="spec-item flip">
+        <div class="spec-meta">
+          <span class="label">Emphasis</span>
+          <span class="val">~18 px inline</span><br>
+          <span>Instrument Serif Italic</span>
+          <span class="face">400 · color shift</span>
+        </div>
+        <div class="spec-content">
+          <p class="type-body">
+            Emphasis is where the serif earns its keep inside running text. Rather than rely on weight or underline, this hierarchy uses a typeface switch — Instrument Serif italic, slightly oversized, tinted <em>terracotta</em>. The shift is immediate and unmistakable. The trick is <em>restraint</em>: one emphasized phrase per paragraph at most, or the contrast collapses into visual noise and the page stops meaning anything at all.
+          </p>
+        </div>
+      </div>
+
+      <!-- Link -->
+      <div class="spec-item">
+        <div class="spec-meta">
+          <span class="label">Link Text</span>
+          <span class="val">~14.4 px inline</span><br>
+          <span>JetBrains Mono 500</span>
+          <span class="face">the machine voice</span>
+        </div>
+        <div class="spec-content">
+          <p class="type-body">
+            Links are the boldest move on this page. Rather than re-color body text and call it done, each link is rendered in JetBrains Mono — the typeface of the terminal — inside a tinted sage capsule with a leading arrow glyph. The link visibly <em>is not body text</em>; it is machine-addressable. Try it: <a href="#">open the documentation</a>, or <a href="#">follow the reference</a>. On hover, the capsule fills and the text inverts — a physical feeling of clicking before the click.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SCALE -->
+  <section class="scale-section">
+    <div class="container">
+      <div class="scale-card">
+        <div class="label">Modular Scale</div>
+        <h3>1.500 <em>— the Perfect Fifth.</em></h3>
+        <div class="subtitle">Large intervals for large contrasts.</div>
+        <p>
+          Each step is <strong>1.5×</strong> the last, starting from a 16 px base. The Perfect Fifth is the most dramatic ratio used across this assignment — intentional here, because three competing typefaces need <em>room to breathe</em>. Large size jumps mean each hierarchy level feels distinctly its own, and the grotesque/serif/mono alternation reads as rhythm rather than confusion. A tighter scale would have made the typeface switches feel accidental. The wider scale earns them.
+        </p>
+        <div class="scale-table">
+          <div><div class="lvl">Body</div><div class="sz">16</div></div>
+          <div><div class="lvl">H4</div><div class="sz">24</div></div>
+          <div><div class="lvl">H3</div><div class="sz">36</div></div>
+          <div><div class="lvl">H2</div><div class="sz">54</div></div>
+          <div><div class="lvl">H1</div><div class="sz">81</div></div>
+          <div><div class="lvl">Display</div><div class="sz">122</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <span>Anusha Prasad · HCI 472 · 2026</span>
+      <span><a href="index.html">Return to Index →</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>

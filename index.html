@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Type Hierarchies — Anusha Prasad · HCI 472</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Google Fonts: all typefaces used across project -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0E0E10;
+      --bg-elev: #17171A;
+      --ink: #EFE9DD;
+      --ink-dim: #A9A39A;
+      --rule: #2A2A2E;
+      --amber: #E8A04A;
+      --rust: #C45E3C;
+      --sage: #9AB08A;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    /* subtle grain */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* Top nav / meta bar */
+    .meta-bar {
+      position: relative;
+      z-index: 5;
+      border-bottom: 1px solid var(--rule);
+      padding: 18px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .meta-bar .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--amber);
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      padding: 140px 0 120px;
+      z-index: 2;
+    }
+    .hero-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-kicker::before {
+      content: "";
+      display: inline-block;
+      width: 36px;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 1;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(64px, 11vw, 168px);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      margin: 0;
+    }
+    .hero-title .line2 {
+      display: block;
+      font-style: normal;
+      font-weight: 500;
+      font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0;
+      color: var(--amber);
+      margin-left: 8vw;
+    }
+
+    .hero-sub {
+      margin-top: 56px;
+      max-width: 560px;
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--ink-dim);
+    }
+    .hero-sub em {
+      color: var(--ink);
+      font-style: italic;
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+    }
+
+    .hero-tags {
+      margin-top: 40px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hero-tags span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      border: 1px solid var(--rule);
+      padding: 8px 14px;
+      border-radius: 999px;
+    }
+
+    /* SECTION HEADINGS */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 24px;
+    }
+    .section-label .num { color: var(--amber); margin-right: 12px; }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 96, "SOFT" 20;
+      font-weight: 400;
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 64px;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--amber);
+      font-variation-settings: "opsz" 96, "SOFT" 50, "WONK" 1;
+    }
+
+    /* HIERARCHY CARDS */
+    .hier-section {
+      position: relative;
+      z-index: 2;
+      padding: 60px 0 100px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .hier-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--rule);
+      padding: 44px 40px 40px;
+      height: 100%;
+      background: var(--bg-elev);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(.2,.8,.2,1), border-color 0.3s, background 0.3s;
+    }
+    .hier-card::after {
+      content: "→";
+      position: absolute;
+      top: 36px;
+      right: 36px;
+      font-size: 22px;
+      color: var(--ink-dim);
+      transition: transform 0.4s cubic-bezier(.2,.8,.2,1), color 0.3s;
+    }
+    .hier-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--amber);
+    }
+    .hier-card:hover::after {
+      transform: translate(6px, -6px);
+      color: var(--amber);
+    }
+
+    .card-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      color: var(--ink-dim);
+      margin-bottom: 90px;
+    }
+
+    .card-preview {
+      margin-bottom: 40px;
+      min-height: 110px;
+    }
+
+    /* Each card shows a micro-preview of its hierarchy */
+    .preview-1 .p-h {
+      font-family: 'Fraunces', serif;
+      font-variation-settings: "opsz" 144, "SOFT" 40, "WONK" 1;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 56px;
+      line-height: 1;
+      color: #F5F0E8;
+      letter-spacing: -0.02em;
+    }
+    .preview-1 .p-sub {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      color: var(--ink-dim);
+      margin-top: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .preview-2 .p-h {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      font-stretch: 125%;
+      font-size: 50px;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #F5F0E8;
+    }
+    .preview-2 .p-sub {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      color: var(--ink-dim);
+      margin-top: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .preview-3 .p-h {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-variation-settings: "opsz" 96;
+      font-weight: 700;
+      font-size: 46px;
+      line-height: 0.95;
+      color: #F5F0E8;
+      letter-spacing: -0.03em;
+    }
+    .preview-3 .p-h em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--rust);
+    }
+    .preview-3 .p-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--ink-dim);
+      margin-top: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .card-desc {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--ink-dim);
+      margin-bottom: 28px;
+    }
+
+    .card-meta {
+      border-top: 1px solid var(--rule);
+      padding-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .card-meta strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    /* SCALE EXPLAINER */
+    .scale-section {
+      padding: 100px 0;
+      border-top: 1px solid var(--rule);
+      position: relative;
+      z-index: 2;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    @media (min-width: 768px) {
+      .scale-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .scale-cell {
+      background: var(--bg);
+      padding: 36px 32px 40px;
+    }
+    .scale-cell .ratio {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 64px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--amber);
+      margin-bottom: 6px;
+    }
+    .scale-cell .ratio-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 28px;
+    }
+    .scale-cell .ratio-assignment {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--ink-dim);
+      margin-bottom: 22px;
+    }
+    .scale-cell .ratio-assignment strong { color: var(--ink); font-weight: 600; }
+
+    .scale-viz {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .scale-bar {
+      background: var(--amber);
+      height: 6px;
+      opacity: 0.8;
+    }
+    .scale-bar.step-6 { width: 18%; }
+    .scale-bar.step-5 { width: 28%; }
+    .scale-bar.step-4 { width: 42%; }
+    .scale-bar.step-3 { width: 60%; }
+    .scale-bar.step-2 { width: 80%; }
+    .scale-bar.step-1 { width: 100%; }
+
+    /* FOOTER */
+    footer {
+      padding: 60px 0 40px;
+      border-top: 1px solid var(--rule);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Reveal on load */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: reveal 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .reveal.d1 { animation-delay: 0.1s; }
+    .reveal.d2 { animation-delay: 0.2s; }
+    .reveal.d3 { animation-delay: 0.3s; }
+    .reveal.d4 { animation-delay: 0.4s; }
+    .reveal.d5 { animation-delay: 0.5s; }
+    @keyframes reveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 767px) {
+      .hero { padding: 80px 0 60px; }
+      .hero-title .line2 { margin-left: 0; }
+      .hier-card { padding: 32px 28px; }
+      .hier-card::after { top: 26px; right: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Meta bar -->
+  <div class="meta-bar">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <span><span class="dot"></span>Anusha Prasad · HCI 472 · DePaul University</span>
+      <span>Assignment 02 — Type Hierarchies · 2026</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-kicker reveal d1">Three Hierarchies · One Designer</div>
+      <h1 class="hero-title reveal d2">
+        Letters as
+        <span class="line2">Architecture.</span>
+      </h1>
+      <p class="hero-sub reveal d3">
+        A study in <em>typographic voice</em> — three web pages, each governed by a different modular scale, each speaking a distinct visual dialect. From editorial restraint to monochromatic rigor to experimental collision, every hierarchy is a deliberate exercise in proportion, pairing, and rhythm.
+      </p>
+      <div class="hero-tags reveal d4">
+        <span>6 Typefaces</span>
+        <span>3 Modular Scales</span>
+        <span>Bootstrap 5</span>
+        <span>Google Fonts</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIERARCHIES -->
+  <section class="hier-section">
+    <div class="container">
+      <div class="section-label"><span class="num">01</span>The Studies</div>
+      <h2 class="section-title">Three pages. Three <em>philosophies.</em></h2>
+
+      <div class="row g-4">
+
+        <!-- Card 1 -->
+        <div class="col-md-6 col-lg-4 reveal d1">
+          <a href="hierarchy1.html" class="hier-card preview-1">
+            <div class="card-num">H · 01 / Two Typefaces</div>
+            <div class="card-preview">
+              <div class="p-h">Editorial</div>
+              <div class="p-sub">Fraunces + IBM Plex Sans</div>
+            </div>
+            <div class="card-title">Editorial Luxe</div>
+            <p class="card-desc">A magazine in miniature. Variable serif with softened terminals pairs with a humanist technical sans — warm, literary, quietly confident.</p>
+            <div class="card-meta">
+              <span>Scale: <strong>1.333</strong></span>
+              <span>Perfect Fourth</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-6 col-lg-4 reveal d2">
+          <a href="hierarchy2.html" class="hier-card preview-2">
+            <div class="card-num">H · 02 / Single Typeface</div>
+            <div class="card-preview">
+              <div class="p-h">SYSTEM</div>
+              <div class="p-sub">Archivo · 100 — 900</div>
+            </div>
+            <div class="card-title">Monochromatic System</div>
+            <p class="card-desc">One typeface, nine weights, and the discipline of the Swiss grid. Archivo carries every role — hierarchy earned through weight, width, and restraint.</p>
+            <div class="card-meta">
+              <span>Scale: <strong>1.250</strong></span>
+              <span>Major Third</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="col-md-6 col-lg-4 reveal d3">
+          <a href="hierarchy3.html" class="hier-card preview-3">
+            <div class="card-num">H · 03 / Experimental</div>
+            <div class="card-preview">
+              <div class="p-h">Hybrid <em>futures</em></div>
+              <div class="p-sub">Bricolage · Instrument · JetBrains</div>
+            </div>
+            <div class="card-title">Hybrid Futures</div>
+            <p class="card-desc">Three voices in conversation: a variable grotesque for weight, an italic display serif for breath, and a monospace for the machine. Editorial meets terminal.</p>
+            <div class="card-meta">
+              <span>Scale: <strong>1.500</strong></span>
+              <span>Perfect Fifth</span>
+            </div>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCALE EXPLAINER -->
+  <section class="scale-section">
+    <div class="container">
+      <div class="section-label"><span class="num">02</span>Method</div>
+      <h2 class="section-title">On <em>modular scales.</em></h2>
+
+      <p style="max-width: 760px; font-size: 17px; line-height: 1.65; color: var(--ink-dim); margin-bottom: 64px;">
+        A modular scale is a sequence of numbers in which each is produced by multiplying the previous by a fixed ratio — the same mathematical logic found in musical intervals. Starting from a <span style="color: var(--ink);">16&nbsp;px</span> base, a single ratio determines every type size on the page. The result is rhythm: sizes that feel related, not arbitrary. Each hierarchy below uses a different ratio — chosen to match its temperament.
+      </p>
+
+      <div class="scale-grid">
+
+        <div class="scale-cell">
+          <div class="ratio">1.333</div>
+          <div class="ratio-name">Perfect Fourth</div>
+          <p class="ratio-assignment">Used in <strong>Editorial Luxe</strong>. A classical interval — spacious enough for a display serif to breathe, tight enough to preserve the authority of body text.</p>
+          <div class="scale-viz">
+            <div class="scale-bar step-1"></div>
+            <div class="scale-bar step-2"></div>
+            <div class="scale-bar step-3"></div>
+            <div class="scale-bar step-4"></div>
+            <div class="scale-bar step-5"></div>
+          </div>
+        </div>
+
+        <div class="scale-cell">
+          <div class="ratio">1.250</div>
+          <div class="ratio-name">Major Third</div>
+          <p class="ratio-assignment">Used in <strong>Monochromatic System</strong>. A gentler ratio suited to a single typeface — differences between levels lean on weight and tracking rather than raw size.</p>
+          <div class="scale-viz">
+            <div class="scale-bar step-1"></div>
+            <div class="scale-bar step-2"></div>
+            <div class="scale-bar step-3"></div>
+            <div class="scale-bar step-4"></div>
+            <div class="scale-bar step-5"></div>
+          </div>
+        </div>
+
+        <div class="scale-cell">
+          <div class="ratio">1.500</div>
+          <div class="ratio-name">Perfect Fifth</div>
+          <p class="ratio-assignment">Used in <strong>Hybrid Futures</strong>. A dramatic interval — large jumps between levels amplify the contrast between the three competing typefaces.</p>
+          <div class="scale-viz">
+            <div class="scale-bar step-1"></div>
+            <div class="scale-bar step-2"></div>
+            <div class="scale-bar step-3"></div>
+            <div class="scale-bar step-4"></div>
+            <div class="scale-bar step-5"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <span>© 2026 · Designed by Anusha Prasad</span>
+      <span>HCI 472 · Typography for Screens</span>
+    </div>
+  </footer>
+
+</body>
+</html>
